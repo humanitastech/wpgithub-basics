@@ -24,9 +24,12 @@ $temporaryPackage = Join-Path ([System.IO.Path]::GetTempPath()) ("$pluginSlug-" 
 try {
     Compress-Archive -LiteralPath $sourceDirectory -DestinationPath $temporaryPackage -CompressionLevel Optimal
 
-    $entries = @(tar -tf $temporaryPackage)
-    if ($LASTEXITCODE -ne 0) {
-        throw 'Não foi possível validar o conteúdo do pacote.'
+    $archive = [System.IO.Compression.ZipFile]::OpenRead($temporaryPackage)
+    try {
+        $entries = @($archive.Entries | ForEach-Object { $_.FullName.Replace('\', '/') })
+    }
+    finally {
+        $archive.Dispose()
     }
     if ($entries -notcontains "$pluginSlug/$pluginSlug.php") {
         throw "O ZIP não contém $pluginSlug/$pluginSlug.php."
