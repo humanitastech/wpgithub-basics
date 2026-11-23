@@ -1,0 +1,13 @@
+.env
+.env.*
+!.env.example
+wp-config.php
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+vendor/
+node_modules/
+/dist/
+*.log
+*.tmp
