@@ -46,3 +46,11 @@ A branch main recebe as versões promovidas. O desenvolvimento acontece em dev.
 ## Licença
 
 GPL-2.0-or-later. Copyright HumanitasTech e contribuidores.
+
+## Nomes de apresentação — candidata 1.1.0
+
+O cartão pode usar display_name de ARTICLE.md da tag da release estável mais recente. O campo deve ser uma string entre aspas no front matter, como `display_name: "Web Security Audit Skill"`. Ele não renomeia repositórios nem cria Posts. Sem release, arquivo ou metadado válido, permanece o nome técnico. O link segue direto para o GitHub.
+
+O parser é restrito e compartilhado por equivalência com a edição completa, com prefixo próprio. Não executa YAML, PHP ou shortcodes, não renderiza o corpo do artigo e armazena em cache somente o nome sanitizado. A consulta pública não envia a credencial de listagem e usa ref explícita refs/tags/<tag>. Há até uma consulta adicional por repositório com release; dimensione a política de chamadas existente sem presumir aumento de limites.
+
+Candidata em dev; publicação de release da basics não incluída nesta entrega. Veja documentacao/VALIDACAO_1.1.0.md.

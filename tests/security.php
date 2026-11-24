@@ -1,7 +1,9 @@
 <?php
 // Offline regression tests; no WordPress database, real credentials or network.
 define('ABSPATH', __DIR__);
-define('HTGP_BASICS_VERSION', '1.0.0');
+$bootstrap = file_get_contents(__DIR__ . '/../codigo/htgithubforwp-basics/htgithubforwp-basics.php');
+preg_match('/Version:\s*([0-9.]+)/', $bootstrap, $candidate_version);
+define('HTGP_BASICS_VERSION', $candidate_version[1]);
 class WP_Error { public $code; public function __construct($code, $message) { $this->code = $code; } }
 function __($text, $domain = '') { return $text; }
 function is_wp_error($value) { return $value instanceof WP_Error; }
@@ -44,6 +46,7 @@ function do_action(...$args) { $GLOBALS['events'][] = $args; }
 function sanitize_text_field($v) { return strip_tags($v); }
 function esc_url_raw($v) { return $v; }
 require __DIR__ . '/../codigo/htgithubforwp-basics/includes/class-htgp-basics-configuration.php';
+require __DIR__ . '/../codigo/htgithubforwp-basics/includes/class-htgp-basics-article-metadata.php';
 require __DIR__ . '/../codigo/htgithubforwp-basics/includes/class-htgp-basics-github-client.php';
 $settings = array('api_base_url' => 'https://api.example', 'api_version' => '2022-11-28', 'user_agent' => 'synthetic-audit', 'timeout_seconds' => 5, 'response_size' => 100000, 'cache_ttl_seconds' => 300, 'api_page_size' => 100, 'max_owner_length' => 39, 'max_include_length' => 1000, 'max_repo_length' => 100);
 $policy = array('HTGP_BASICS_PUBLIC_LINK_ORIGINS' => 'https://public.example', 'HTGP_BASICS_PROFILE_ORIGINS' => 'https://public.example', 'HTGP_BASICS_FAILURE_TTL_SECONDS' => '10', 'HTGP_BASICS_MAX_BACKOFF_SECONDS' => '60', 'HTGP_BASICS_REQUEST_BUDGET_SECONDS' => '8', 'HTGP_BASICS_MAX_REQUESTS' => '2', 'HTGP_BASICS_MAX_TIMEOUT_SECONDS' => '5', 'HTGP_BASICS_MAX_RESPONSE_SIZE' => '100000', 'HTGP_BASICS_MAX_API_PAGE_SIZE' => '100');
@@ -85,10 +88,10 @@ reset_state();
 check(is_wp_error(client()->latest_release('demo', '..')) && !$calls, 'path dot segment rejected before HTTP');
 reset_state(); $transport_error = true; client()->latest_release('demo', 'demo'); client()->latest_release('demo', 'demo'); check(count($calls) === 1 && !$options, 'timeout backoff and lock cleanup');
 reset_state(); $status = 404; check(client()->latest_release('demo', 'demo') === null && client()->latest_release('demo', 'demo') === null && count($calls) === 1, 'release 404 negative cache');
-reset_state(); $body = array('tag_name' => 'v1', 'html_url' => 'https://public.example/demo/release'); check(client()->latest_release('demo', 'demo')['tag_name'] === 'v1', 'legitimate release');
+reset_state(); $body = array('tag_name' => 'v1', 'html_url' => 'https://public.example/demo/release', 'draft' => false, 'prerelease' => false, 'published_at' => '2026-11-24T12:00:00Z'); check(client()->latest_release('demo', 'demo')['tag_name'] === 'v1', 'legitimate release');
 reset_state(); $nested = null; $during_http = function () use (&$nested, $query) { $nested = client()->repositories('demo', $query); }; client()->repositories('demo', $query);
 check(is_wp_error($nested) && $nested->code === 'htgp_basics_busy' && count($calls) === 1, 'interleaved worker cannot issue duplicate HTTP');
-reset_state(); $c = client(); $c->repositories('demo', $query); $body = array('tag_name' => 'v1', 'html_url' => 'https://public.example/demo/release'); $c->latest_release('demo', 'one');
+reset_state(); $c = client(); $c->repositories('demo', $query); $body = array('tag_name' => 'v1', 'html_url' => 'https://public.example/demo/release', 'draft' => false, 'prerelease' => false, 'published_at' => '2026-11-24T12:00:00Z'); $c->latest_release('demo', 'one');
 check(is_wp_error($c->latest_release('demo', 'two')) && count($calls) === 2, 'aggregate request count enforced');
 check($calls[0]['args']['timeout'] <= 5 && $calls[0]['args']['timeout'] <= 8, 'configured time budget caps transport');
 reset_state(); $conf = new HTGP_Basics_Configuration(); $options['htgp_basics_lock_' . $conf->fingerprint()] = array('expires' => microtime(true) - 1, 'id' => 'expired');
@@ -177,6 +180,50 @@ foreach (array('theme' => 'Temas', 'app' => 'Aplicações', 'library' => 'Biblio
 }
 $html = render_repositories(array());
 check(strpos($html, 'htgp-basics-project-groups') === false && strpos($html, '<article ') === false, 'empty listing has no groups');
+
+putenv('HTGP_BASICS_MAX_REQUESTS=8');
+function name_fixture($payload, $no_release = false, $missing_file = false) {
+    reset_state();
+    $property = new ReflectionProperty(HTGP_Basics_Plugin::class, 'client');
+    $property->setAccessible(true);
+    $property->setValue($GLOBALS['plugin'], client());
+    $GLOBALS['during_http'] = function () use ($payload, $no_release, $missing_file) {
+        $url = end($GLOBALS['calls'])['url'];
+        $GLOBALS['status'] = 200;
+        if (strpos($url, '/releases/latest') !== false) {
+            $GLOBALS['status'] = $no_release ? 404 : 200;
+            $GLOBALS['body'] = array('tag_name' => 'release/1.0', 'html_url' => 'https://public.example/demo/release',
+                'draft' => false, 'prerelease' => false, 'published_at' => '2026-11-24T12:00:00Z');
+        } elseif (strpos($url, '/contents/ARTICLE.md') !== false) {
+            $GLOBALS['status'] = $missing_file ? 404 : 200;
+            $GLOBALS['body'] = array('type' => 'file', 'path' => 'ARTICLE.md', 'encoding' => 'base64',
+                'content' => base64_encode("---\ndisplay_name: " . $payload . "\n---\nDO_NOT_STORE_ARTICLE_BODY"));
+        } else { $GLOBALS['body'] = array($GLOBALS['repo']); }
+    };
+    return $GLOBALS['plugin']->render_shortcode(array());
+}
+$html = name_fixture('"Web Security Audit Skill"');
+check(strpos($html, '>Web Security Audit Skill</a>') !== false && strpos($html, 'href="' . $repo['html_url'] . '"') !== false,
+    'released display name changes the card title while preserving the direct repository link');
+check(count($calls) === 3 && strpos($calls[2]['url'], 'ref=refs%2Ftags%2Frelease%2F1.0') !== false,
+    'name is read only from the explicit release tag, including slash tags');
+check(!isset($calls[1]['args']['headers']['Authorization']) && !isset($calls[2]['args']['headers']['Authorization']),
+    'public release and article metadata requests send no repository credential');
+check(strpos(serialize($cache), 'DO_NOT_STORE_ARTICLE_BODY') === false && strpos($html, 'DO_NOT_STORE_ARTICLE_BODY') === false,
+    'only the display name is cached and the article body is never published');
+foreach (array('!!php/object:payload', '[nested, list]', '"<script>alert(1)</script>"', '"[shortcode]"', 'true') as $payload) {
+    $html = name_fixture($payload);
+    check(strpos($html, '>demo</a>') !== false && strpos($html, '<script>') === false,
+        'unsafe display name falls back to the technical repository name');
+}
+$html = name_fixture('"Nice name"', true);
+check(count($calls) === 2 && strpos($html, '>demo</a>') !== false,
+    'repository without a published release makes no article or branch request');
+$html = name_fixture('"Nice name"', false, true);
+check(count($calls) === 3 && strpos($html, '>demo</a>') !== false,
+    'missing article in the tag keeps the technical name without branch fallback');
+$metadata = HTGP_Basics_Article_Metadata::parse("---\ndisplay_name: \"One\"\ndisplay_name: \"Two\"\n---\nBody");
+check($metadata['display_name'] === '', 'duplicate display metadata is rejected');
 
 foreach (array_merge(array_keys($policy), array('HTGP_BASICS_GITHUB_TOKEN', 'HTGP_BASICS_GITHUB_TOKEN_ORIGIN')) as $key) { putenv($key); }
 echo "All offline security regressions passed.\n";

@@ -54,16 +54,36 @@ final class HTGP_Basics_GitHub_Client {
         if (!$this->valid_owner($owner) || !$this->valid_repository($repository)) { return $this->error('htgp_basics_release'); }
         $url = trailingslashit($this->configuration->get('api_base_url')) . 'repos/' . rawurlencode($owner) . '/' . rawurlencode($repository) . '/releases/latest';
         return $this->fetch($url, function ($body) {
-            if (!is_array($body) || !is_string($body['tag_name'] ?? null) || $body['tag_name'] === '' ||
-                (isset($body['published_at']) && !is_string($body['published_at'])) ||
+            if (!is_array($body) || !$this->valid_release_tag($body['tag_name'] ?? null) ||
+                ($body['draft'] ?? null) !== false || ($body['prerelease'] ?? null) !== false ||
+                !is_string($body['published_at'] ?? null) || strtotime($body['published_at']) === false ||
                 !$this->configuration->allowed_url($body['html_url'] ?? null)) { return $this->error('htgp_basics_invalid_response'); }
-            return array('tag_name' => sanitize_text_field($body['tag_name']), 'published_at' => sanitize_text_field($body['published_at'] ?? ''), 'html_url' => esc_url_raw($body['html_url']));
+            return array('tag_name' => $body['tag_name'], 'published_at' => sanitize_text_field($body['published_at'] ?? ''), 'html_url' => esc_url_raw($body['html_url']));
+        }, true);
+    }
+    public function display_name($owner, $repository, array $release) {
+        if (!$this->valid_owner($owner) || !$this->valid_repository($repository) ||
+            !$this->valid_release_tag($release['tag_name'] ?? null)) { return $this->error('htgp_basics_article'); }
+        $url = add_query_arg(array('ref' => 'refs/tags/' . $release['tag_name']),
+            trailingslashit($this->configuration->get('api_base_url')) . 'repos/' .
+            rawurlencode($owner) . '/' . rawurlencode($repository) . '/contents/ARTICLE.md');
+        return $this->fetch($url, function ($body) {
+            if (!is_array($body) || ($body['type'] ?? null) !== 'file' || ($body['path'] ?? null) !== 'ARTICLE.md' ||
+                ($body['encoding'] ?? null) !== 'base64' || !is_string($body['content'] ?? null)) {
+                return $this->error('htgp_basics_invalid_response');
+            }
+            $markdown = base64_decode($body['content'], true);
+            if ($markdown === false || strlen($markdown) > $this->configuration->get('response_size') || !preg_match('//u', $markdown)) {
+                return $this->error('htgp_basics_invalid_response');
+            }
+            // Only the sanitized display name is cached, never the article body.
+            return HTGP_Basics_Article_Metadata::parse($markdown)['display_name'];
         }, true);
     }
     private function fetch($url, $validate, $allow_not_found = false) {
         if (!$this->configuration->ready() || !wp_http_validate_url($url) || $this->configuration->origin($url) !== $this->configuration->origin($this->configuration->get('api_base_url'))) { return $this->error('htgp_basics_configuration'); }
         $scope = $this->configuration->fingerprint();
-        $key = 'htgp_basics_data_' . hash('sha256', 'basics-public-v1|' . $scope . $url);
+        $key = 'htgp_basics_data_' . hash('sha256', 'basics-public-v2|' . $scope . $url);
         $cached = get_transient($key);
         if (is_array($cached) && array_key_exists('data', $cached)) { return $cached['data']; }
         $backoff_key = 'htgp_basics_backoff_' . $scope . ($allow_not_found && $this->configuration->get('github_token') !== '' ? '_anonymous_release' : '');
@@ -129,6 +149,17 @@ final class HTGP_Basics_GitHub_Client {
         set_transient($key, true, (int) $ttl);
         do_action('htgp_basics_security_event', $event);
         return $this->error('htgp_basics_unavailable');
+    }
+    private function valid_release_tag($tag) {
+        if (!is_string($tag) || $tag === '' || $tag === '@' ||
+            preg_match('/[\x00-\x20\x7f]/', $tag) || strpbrk($tag, '~^:?*[\\') !== false ||
+            strpos($tag, '..') !== false || strpos($tag, '@{') !== false || substr($tag, -1) === '.') {
+            return false;
+        }
+        foreach (explode('/', $tag) as $component) {
+            if ($component === '' || $component[0] === '.' || substr($component, -5) === '.lock') { return false; }
+        }
+        return true;
     }
     private function valid_owner($owner) {
         return is_string($owner) && $owner !== '' && strlen($owner) <= $this->configuration->get('max_owner_length') && preg_match('/^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/', $owner);

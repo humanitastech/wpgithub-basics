@@ -1,0 +1,11 @@
+PASS: candidate version loads from the installed ZIP
+PASS: upgrade preserves basics settings
+PASS: native shortcode displays the released project name
+PASS: card retains the direct repository URL
+PASS: metadata feature neither creates Posts nor publishes the body
+PASS: warm metadata cache avoids extra HTTP calls
+PASS: hostile metadata safely falls back in native WordPress
+PASS: absent release avoids article/branch lookup
+PASS: deactivation succeeds
+PASS: reactivation succeeds
+PASS: reactivation preserves settings

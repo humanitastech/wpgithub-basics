@@ -1,0 +1,7 @@
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\codigo\htgithubforwp-basics\htgithubforwp-basics.php
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\codigo\htgithubforwp-basics\includes\class-htgp-basics-article-metadata.php
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\codigo\htgithubforwp-basics\includes\class-htgp-basics-configuration.php
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\codigo\htgithubforwp-basics\includes\class-htgp-basics-github-client.php
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\codigo\htgithubforwp-basics\includes\class-htgp-basics-plugin.php
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\tests\integration.php
+No syntax errors detected in D:\PROJECTS\Dev\wpgithub-basics\tests\security.php

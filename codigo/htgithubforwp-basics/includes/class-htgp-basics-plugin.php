@@ -78,6 +78,8 @@ final class HTGP_Basics_Plugin {
                 $repository_owner = sanitize_text_field($repository['owner']['login'] ?? $owner);
                 $latest_release = $this->client->latest_release($repository_owner, $repository['name']);
                 $latest_release = is_array($latest_release) ? $latest_release : null;
+                $display_name = $latest_release ? $this->client->display_name($repository_owner, $repository['name'], $latest_release) : '';
+                $display_name = is_string($display_name) && $display_name !== '' ? $display_name : $repository['name'];
                 $release_date = '';
                 if ($latest_release && !empty($latest_release['published_at'])) {
                     $release_timestamp = strtotime($latest_release['published_at']);
@@ -91,7 +93,7 @@ final class HTGP_Basics_Plugin {
                         <span class="htgp-basics-project__eyebrow"><?php esc_html_e('Repositório público', 'htgithubforwp-basics'); ?></span>
                         <span class="htgp-basics-project__mark" aria-hidden="true">↗</span>
                     </div>
-                    <h3 class="htgp-basics-project__title"><a href="<?php echo esc_url($repository['html_url']); ?>" target="_blank" rel="noopener noreferrer external"><?php echo esc_html($repository['name']); ?></a></h3>
+                    <h3 class="htgp-basics-project__title"><a href="<?php echo esc_url($repository['html_url']); ?>" target="_blank" rel="noopener noreferrer external"><?php echo esc_html($display_name); ?></a></h3>
                     <p class="htgp-basics-project__description"><?php echo esc_html(!empty($repository['description']) ? $repository['description'] : __('Sem descrição no GitHub.', 'htgithubforwp-basics')); ?></p>
                     <dl class="htgp-basics-project__metadata">
                         <div><dt><?php esc_html_e('Autor', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html($repository_owner); ?></dd></div>

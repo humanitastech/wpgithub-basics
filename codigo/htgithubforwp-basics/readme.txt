@@ -3,7 +3,7 @@ Contributors: humanitastech
 Tags: github, repositories, portfolio, shortcode
 Requires at least: 6.5
 Requires PHP: 7.4
-Stable tag: 1.0.0
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -27,6 +27,11 @@ Os tópicos plugin, skill, theme, app, library e docs organizam o catálogo. Out
 O plugin consulta a API GitHub na origem HTTPS aprovada pelo ambiente. A organização que o instala deve informar o serviço e os termos aplicáveis aos seus usuários.
 
 == Changelog ==
+
+= 1.1.0 =
+* Nome de apresentação display_name lido de ARTICLE.md da tag da release estável.
+* Fallback técnico para metadados ausentes ou inválidos; links continuam diretos ao GitHub.
+* Parser restrito e cache apenas do nome, sem importação do corpo ou criação de Posts.
 
 = 1.0.0 =
 * Primeira edição basics com repositórios públicos, agrupamento por tópicos, cache e filtros.
