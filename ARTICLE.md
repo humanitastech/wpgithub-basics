@@ -1,10 +1,10 @@
 ---
-display_name: "Github for Wordpress - Basics"
+display_name: "Repository Catalog"
 ---
 
-# Github for Wordpress - Basics 1.1.0 shows readable names for public repositories
+# Repository Catalog 1.1.0 shows readable names for public repositories
 
-Github for Wordpress - Basics helps WordPress site owners present public GitHub repositories in a catalogue. Its cards show available descriptions, languages, statistics and release information, then take visitors directly to GitHub.
+Repository Catalog helps WordPress site owners present public GitHub repositories in a catalogue. Its cards show available descriptions, languages, statistics and release information, then take visitors directly to GitHub.
 
 Configure the GitHub profile and add `[ht_github_projects_basics]` to a page. Repositories can be selected, sorted and grouped by supported topics, including `plugin`, `skill`, `theme`, `app`, `library` and `docs`.
 
@@ -25,4 +25,4 @@ The basics edition reads public repositories. It retains direct repository links
 
 ## Availability
 
-HumanitasTech maintains the public project under GPL-2.0-or-later. This update is available in the [development branch](https://github.com/humanitastech/wpgithub-basics/tree/dev); it has not been published as a release in this task. Follow the [repository instructions](https://github.com/humanitastech/wpgithub-basics) to build `htgithubforwp-basics.zip`.
+HumanitasTech maintains the public project under GPL-2.0-or-later. Get the installable package from [GitHub Releases](https://github.com/humanitastech/wpgithub-basics/releases).

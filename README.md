@@ -1,4 +1,4 @@
-# HumanitasTech GitHub for WordPress basics
+# Repository Catalog
 
 Plugin WordPress para apresentar repositórios públicos do GitHub, agrupados por tópicos.
 
@@ -22,7 +22,7 @@ Na branch dev, execute o empacotamento na raiz do projeto.
 ./build-package.ps1
 ~~~
 
-O resultado é dist/htgithubforwp-basics.zip. Instale-o em Plugins → Adicionar plugin → Enviar plugin e configure Integração GitHub basics.
+O resultado é dist/repository-catalog.zip. Instale-o em Plugins → Adicionar plugin → Enviar plugin e configure Integração GitHub basics.
 
 Consulte documentacao/CONFIGURACAO_SEGURA.md para definir a política de consultas, origens HTTPS e credencial opcional do ambiente.
 
@@ -39,7 +39,7 @@ Adicione o shortcode a uma página.
 php tests/security.php
 ~~~
 
-O diretório do plugin é codigo/htgithubforwp-basics. A configuração usa a opção htgp_basics_settings e as variáveis HTGP_BASICS_*.
+O diretório do plugin é codigo/repository-catalog. A configuração usa a opção htgp_basics_settings e as variáveis HTGP_BASICS_*.
 
 A branch main recebe as versões promovidas. O desenvolvimento acontece em dev.
 

@@ -26,7 +26,7 @@ Com o plugin ativo, abra **Configurações → Integração GitHub basics** e pr
 |---|---|
 | Endpoint HTTPS da API | `https://api.github.com` |
 | Versão da API | `2022-11-28` |
-| Identificação HTTP | `htgithubforwp-basics-review` |
+| Identificação HTTP | `repository-catalog-review` |
 | Timeout em segundos | 3 |
 | Limite da resposta em bytes | 524288 |
 | Cache em segundos | 600 |

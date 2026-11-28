@@ -29,7 +29,7 @@ function verify($condition, $label) {
     if (!$condition) { throw new RuntimeException($label); }
     echo 'PASS: ' . $label . PHP_EOL;
 }
-$plugin_file = 'htgithubforwp-basics/htgithubforwp-basics.php';
+$plugin_file = 'repository-catalog/repository-catalog.php';
 if ($phase === 'install') {
     wp_install('Basics isolated', 'basics_test_admin', 'admin@example.test', false, '', wp_generate_password());
     update_option('htgp_basics_settings', $settings);

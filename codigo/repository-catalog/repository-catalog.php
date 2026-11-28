@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: HumanitasTech GitHub for WordPress basics
+ * Plugin Name: Repository Catalog
  * Plugin URI:  https://github.com/humanitastech/wpgithub-basics
  * Description: Exibe repositórios públicos do GitHub em uma grade curável, responsiva e armazenada em cache.
  * Version:     1.1.0
@@ -9,7 +9,7 @@
  * Author:      HumanitasTech
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: htgithubforwp-basics
+ * Text Domain: repository-catalog
  */
 
 if (!defined('ABSPATH')) {

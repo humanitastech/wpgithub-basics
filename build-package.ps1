@@ -4,7 +4,7 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-$pluginSlug = 'htgithubforwp-basics'
+$pluginSlug = 'repository-catalog'
 $sourceDirectory = Join-Path $ProjectRoot "codigo\$pluginSlug"
 $mainFile = Join-Path $sourceDirectory "$pluginSlug.php"
 $distributionDirectory = Join-Path $ProjectRoot 'dist'
@@ -34,7 +34,7 @@ try {
     if ($entries -notcontains "$pluginSlug/$pluginSlug.php") {
         throw "O ZIP não contém $pluginSlug/$pluginSlug.php."
     }
-    if ($entries | Where-Object { $_ -match '^(?:htgithubforwp-basics[-_.]?\d|humanitastech-github)' }) {
+    if ($entries | Where-Object { $_ -match '^(?:repository-catalog[-_.]?\d|htgithubforwp-basics|humanitastech-github)' }) {
         throw 'O ZIP contém diretório versionado ou slug legado.'
     }
 

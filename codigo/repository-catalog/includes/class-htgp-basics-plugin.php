@@ -66,7 +66,7 @@ final class HTGP_Basics_Plugin {
         $grouped = array_keys($groups) !== array('');
         ob_start();
         ?>
-        <section class="<?php echo $grouped ? 'htgp-basics-project-groups' : 'htgp-basics-projects'; ?>" aria-label="<?php esc_attr_e('Projetos públicos', 'htgithubforwp-basics'); ?>">
+        <section class="<?php echo $grouped ? 'htgp-basics-project-groups' : 'htgp-basics-projects'; ?>" aria-label="<?php esc_attr_e('Projetos públicos', 'repository-catalog'); ?>">
             <?php foreach ($groups as $label => $group_repositories) : ?>
                 <?php if ($grouped) : ?>
                     <section class="htgp-basics-project-group" aria-label="<?php echo esc_attr($label); ?>">
@@ -90,19 +90,19 @@ final class HTGP_Basics_Plugin {
                 ?>
                 <article class="htgp-basics-project">
                     <div class="htgp-basics-project__header">
-                        <span class="htgp-basics-project__eyebrow"><?php esc_html_e('Repositório público', 'htgithubforwp-basics'); ?></span>
+                        <span class="htgp-basics-project__eyebrow"><?php esc_html_e('Repositório público', 'repository-catalog'); ?></span>
                         <span class="htgp-basics-project__mark" aria-hidden="true">↗</span>
                     </div>
                     <h3 class="htgp-basics-project__title"><a href="<?php echo esc_url($repository['html_url']); ?>" target="_blank" rel="noopener noreferrer external"><?php echo esc_html($display_name); ?></a></h3>
-                    <p class="htgp-basics-project__description"><?php echo esc_html(!empty($repository['description']) ? $repository['description'] : __('Sem descrição no GitHub.', 'htgithubforwp-basics')); ?></p>
+                    <p class="htgp-basics-project__description"><?php echo esc_html(!empty($repository['description']) ? $repository['description'] : __('Sem descrição no GitHub.', 'repository-catalog')); ?></p>
                     <dl class="htgp-basics-project__metadata">
-                        <div><dt><?php esc_html_e('Autor', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html($repository_owner); ?></dd></div>
-                        <div><dt><?php esc_html_e('Versão', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html($latest_release ? $latest_release['tag_name'] : __('Sem release', 'htgithubforwp-basics')); ?></dd></div>
-                        <?php if ($release_date !== '') : ?><div><dt><?php esc_html_e('Última versão', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html($release_date); ?></dd></div><?php endif; ?>
-                        <?php if ($updated_date !== '') : ?><div><dt><?php esc_html_e('Atualizado', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html($updated_date); ?></dd></div><?php endif; ?>
-                        <?php if (!empty($repository['language'])) : ?><div><dt><?php esc_html_e('Linguagem', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html($repository['language']); ?></dd></div><?php endif; ?>
-                        <div><dt><?php esc_html_e('Estrelas', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html(number_format_i18n((int) ($repository['stargazers_count'] ?? 0))); ?></dd></div>
-                        <div><dt><?php esc_html_e('Forks', 'htgithubforwp-basics'); ?></dt><dd><?php echo esc_html(number_format_i18n((int) ($repository['forks_count'] ?? 0))); ?></dd></div>
+                        <div><dt><?php esc_html_e('Autor', 'repository-catalog'); ?></dt><dd><?php echo esc_html($repository_owner); ?></dd></div>
+                        <div><dt><?php esc_html_e('Versão', 'repository-catalog'); ?></dt><dd><?php echo esc_html($latest_release ? $latest_release['tag_name'] : __('Sem release', 'repository-catalog')); ?></dd></div>
+                        <?php if ($release_date !== '') : ?><div><dt><?php esc_html_e('Última versão', 'repository-catalog'); ?></dt><dd><?php echo esc_html($release_date); ?></dd></div><?php endif; ?>
+                        <?php if ($updated_date !== '') : ?><div><dt><?php esc_html_e('Atualizado', 'repository-catalog'); ?></dt><dd><?php echo esc_html($updated_date); ?></dd></div><?php endif; ?>
+                        <?php if (!empty($repository['language'])) : ?><div><dt><?php esc_html_e('Linguagem', 'repository-catalog'); ?></dt><dd><?php echo esc_html($repository['language']); ?></dd></div><?php endif; ?>
+                        <div><dt><?php esc_html_e('Estrelas', 'repository-catalog'); ?></dt><dd><?php echo esc_html(number_format_i18n((int) ($repository['stargazers_count'] ?? 0))); ?></dd></div>
+                        <div><dt><?php esc_html_e('Forks', 'repository-catalog'); ?></dt><dd><?php echo esc_html(number_format_i18n((int) ($repository['forks_count'] ?? 0))); ?></dd></div>
                     </dl>
                 </article>
             <?php endforeach; ?>
@@ -116,12 +116,12 @@ final class HTGP_Basics_Plugin {
     private function group_repositories(array $repositories) {
         // Topic order in GitHub does not determine classification priority.
         $labels = array(
-            'plugin' => __('Plugins', 'htgithubforwp-basics'),
-            'skill' => __('Skills', 'htgithubforwp-basics'),
-            'theme' => __('Temas', 'htgithubforwp-basics'),
-            'app' => __('Aplicações', 'htgithubforwp-basics'),
-            'library' => __('Bibliotecas', 'htgithubforwp-basics'),
-            'docs' => __('Documentação', 'htgithubforwp-basics'),
+            'plugin' => __('Plugins', 'repository-catalog'),
+            'skill' => __('Skills', 'repository-catalog'),
+            'theme' => __('Temas', 'repository-catalog'),
+            'app' => __('Aplicações', 'repository-catalog'),
+            'library' => __('Bibliotecas', 'repository-catalog'),
+            'docs' => __('Documentação', 'repository-catalog'),
         );
         $buckets = array();
         $general = array();
@@ -144,12 +144,12 @@ final class HTGP_Basics_Plugin {
         foreach ($labels as $topic => $label) {
             if (isset($buckets[$topic])) { $groups[$label] = $buckets[$topic]; }
         }
-        if ($general) { $groups[__('Geral', 'htgithubforwp-basics')] = $general; }
+        if ($general) { $groups[__('Geral', 'repository-catalog')] = $general; }
         return $groups;
     }
 
     public function admin_menu() {
-        add_options_page(__('Integração GitHub basics', 'htgithubforwp-basics'), __('Integração GitHub basics', 'htgithubforwp-basics'), 'manage_options', 'htgp-basics-settings', array($this, 'settings_page'));
+        add_options_page(__('Integração GitHub basics', 'repository-catalog'), __('Integração GitHub basics', 'repository-catalog'), 'manage_options', 'htgp-basics-settings', array($this, 'settings_page'));
     }
 
     public function register_settings() {
@@ -158,12 +158,12 @@ final class HTGP_Basics_Plugin {
 
     public function validate_settings($input) {
         if (!current_user_can('manage_options') || !is_array($input)) {
-            add_settings_error('htgp_basics_settings', 'forbidden', __('Configuração rejeitada.', 'htgithubforwp-basics'));
+            add_settings_error('htgp_basics_settings', 'forbidden', __('Configuração rejeitada.', 'repository-catalog'));
             return get_option('htgp_basics_settings', array());
         }
         foreach ($input as $value) {
             if (!is_scalar($value)) {
-                add_settings_error('htgp_basics_settings', 'invalid_type', __('Configuração rejeitada.', 'htgithubforwp-basics'));
+                add_settings_error('htgp_basics_settings', 'invalid_type', __('Configuração rejeitada.', 'repository-catalog'));
                 return get_option('htgp_basics_settings', array());
             }
         }
@@ -204,7 +204,7 @@ final class HTGP_Basics_Plugin {
         }
         $profile_owner = $this->owner_from_profile_url($validated['profile_url'], $validated['max_owner_length']);
         if (!is_array($endpoint) || ($endpoint['scheme'] ?? '') !== 'https' || empty($endpoint['host']) || isset($endpoint['user']) || isset($endpoint['pass']) || !wp_http_validate_url($validated['api_base_url']) || !preg_match('/^\d{4}-\d{2}-\d{2}$/', $validated['api_version']) || $validated['user_agent'] === '' || $invalid_integer || is_wp_error($profile_owner) || $validated['limit'] < 1 || $validated['limit'] > $validated['api_page_size'] || !in_array($validated['sort'], array('created', 'updated', 'pushed', 'full_name'), true) || !in_array($validated['direction'], array('asc', 'desc'), true) || !in_array($validated['type'], array('all', 'owner', 'member'), true)) {
-            add_settings_error('htgp_basics_settings', 'invalid', __('Configuração rejeitada por validação.', 'htgithubforwp-basics'));
+            add_settings_error('htgp_basics_settings', 'invalid', __('Configuração rejeitada por validação.', 'repository-catalog'));
             return get_option('htgp_basics_settings', array());
         }
         do_action('htgp_basics_security_event', 'configuration_validated');
@@ -213,30 +213,30 @@ final class HTGP_Basics_Plugin {
 
     public function settings_page() {
         if (!current_user_can('manage_options')) {
-            wp_die(esc_html__('Acesso negado.', 'htgithubforwp-basics'));
+            wp_die(esc_html__('Acesso negado.', 'repository-catalog'));
         }
         $settings = get_option('htgp_basics_settings', array());
         ?>
-        <div class="wrap"><h1><?php esc_html_e('Integração GitHub basics', 'htgithubforwp-basics'); ?></h1>
+        <div class="wrap"><h1><?php esc_html_e('Integração GitHub basics', 'repository-catalog'); ?></h1>
         <?php if (!$this->configuration->ready()) : ?><div class="notice notice-error"><p><?php echo esc_html(implode(' ', $this->configuration->errors())); ?></p></div><?php endif; ?>
         <form action="options.php" method="post"><?php settings_fields('htgp_basics_settings'); ?>
         <table class="form-table" role="presentation">
-        <tr><th><label for="htgp_basics_api_base_url"><?php esc_html_e('Endpoint HTTPS da API', 'htgithubforwp-basics'); ?></label></th><td><input type="url" class="regular-text" id="htgp_basics_api_base_url" name="htgp_basics_settings[api_base_url]" value="<?php echo esc_attr($settings['api_base_url'] ?? ''); ?>" required></td></tr>
-        <tr><th><label for="htgp_basics_api_version"><?php esc_html_e('Versão da API', 'htgithubforwp-basics'); ?></label></th><td><input class="regular-text" id="htgp_basics_api_version" name="htgp_basics_settings[api_version]" value="<?php echo esc_attr($settings['api_version'] ?? ''); ?>" pattern="\d{4}-\d{2}-\d{2}" required></td></tr>
-        <tr><th><label for="htgp_basics_user_agent"><?php esc_html_e('Identificação HTTP', 'htgithubforwp-basics'); ?></label></th><td><input class="regular-text" id="htgp_basics_user_agent" name="htgp_basics_settings[user_agent]" value="<?php echo esc_attr($settings['user_agent'] ?? ''); ?>" required></td></tr>
-        <tr><th><label for="htgp_basics_timeout_seconds"><?php esc_html_e('Timeout em segundos', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_timeout_seconds" name="htgp_basics_settings[timeout_seconds]" value="<?php echo esc_attr($settings['timeout_seconds'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_response_size"><?php esc_html_e('Limite da resposta em bytes', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_response_size" name="htgp_basics_settings[response_size]" value="<?php echo esc_attr($settings['response_size'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_cache_ttl_seconds"><?php esc_html_e('Cache em segundos', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_cache_ttl_seconds" name="htgp_basics_settings[cache_ttl_seconds]" value="<?php echo esc_attr($settings['cache_ttl_seconds'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_api_page_size"><?php esc_html_e('Máximo de projetos por consulta', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_api_page_size" name="htgp_basics_settings[api_page_size]" value="<?php echo esc_attr($settings['api_page_size'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_max_owner_length"><?php esc_html_e('Limite do identificador da conta', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_max_owner_length" name="htgp_basics_settings[max_owner_length]" value="<?php echo esc_attr($settings['max_owner_length'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_max_include_length"><?php esc_html_e('Limite do filtro de inclusão', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_max_include_length" name="htgp_basics_settings[max_include_length]" value="<?php echo esc_attr($settings['max_include_length'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_max_repo_length"><?php esc_html_e('Limite do nome de repositório', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_max_repo_length" name="htgp_basics_settings[max_repo_length]" value="<?php echo esc_attr($settings['max_repo_length'] ?? ''); ?>" min="1" required></td></tr>
-        <tr><th><label for="htgp_basics_profile_url"><?php esc_html_e('URL do perfil no GitHub', 'htgithubforwp-basics'); ?></label></th><td><input type="url" class="regular-text" id="htgp_basics_profile_url" name="htgp_basics_settings[profile_url]" value="<?php echo esc_attr($settings['profile_url'] ?? ''); ?>" aria-describedby="htgp_basics_profile_url_description" required><p class="description" id="htgp_basics_profile_url_description"><?php esc_html_e('Informe a URL do perfil em uma origem aprovada pelo ambiente.', 'htgithubforwp-basics'); ?></p></td></tr>
-        <tr><th><label for="htgp_basics_limit"><?php esc_html_e('Quantidade', 'htgithubforwp-basics'); ?></label></th><td><input type="number" id="htgp_basics_limit" name="htgp_basics_settings[limit]" value="<?php echo esc_attr($settings['limit'] ?? ''); ?>" min="1" max="<?php echo esc_attr($this->configuration->get('api_page_size')); ?>" required></td></tr>
-        <tr><th><label for="htgp_basics_sort"><?php esc_html_e('Ordenação', 'htgithubforwp-basics'); ?></label></th><td><select id="htgp_basics_sort" name="htgp_basics_settings[sort]" required><option value=""></option><?php foreach (array('created','updated','pushed','full_name') as $value) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($settings['sort'] ?? '', $value); ?>><?php echo esc_html($value); ?></option><?php endforeach; ?></select></td></tr>
-        <tr><th><label for="htgp_basics_direction"><?php esc_html_e('Direção', 'htgithubforwp-basics'); ?></label></th><td><select id="htgp_basics_direction" name="htgp_basics_settings[direction]" required><option value=""></option><?php foreach (array('asc','desc') as $value) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($settings['direction'] ?? '', $value); ?>><?php echo esc_html($value); ?></option><?php endforeach; ?></select></td></tr>
-        <tr><th><label for="htgp_basics_type"><?php esc_html_e('Vínculo', 'htgithubforwp-basics'); ?></label></th><td><select id="htgp_basics_type" name="htgp_basics_settings[type]" required><option value=""></option><?php foreach (array('all','owner','member') as $value) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($settings['type'] ?? '', $value); ?>><?php echo esc_html($value); ?></option><?php endforeach; ?></select></td></tr>
-        <tr><th><?php esc_html_e('Inclusões', 'htgithubforwp-basics'); ?></th><td><label><input type="checkbox" name="htgp_basics_settings[include_forks]" value="1" <?php checked(!empty($settings['include_forks'])); ?>> <?php esc_html_e('Forks', 'htgithubforwp-basics'); ?></label><br><label><input type="checkbox" name="htgp_basics_settings[include_archived]" value="1" <?php checked(!empty($settings['include_archived'])); ?>> <?php esc_html_e('Arquivados', 'htgithubforwp-basics'); ?></label></td></tr>
+        <tr><th><label for="htgp_basics_api_base_url"><?php esc_html_e('Endpoint HTTPS da API', 'repository-catalog'); ?></label></th><td><input type="url" class="regular-text" id="htgp_basics_api_base_url" name="htgp_basics_settings[api_base_url]" value="<?php echo esc_attr($settings['api_base_url'] ?? ''); ?>" required></td></tr>
+        <tr><th><label for="htgp_basics_api_version"><?php esc_html_e('Versão da API', 'repository-catalog'); ?></label></th><td><input class="regular-text" id="htgp_basics_api_version" name="htgp_basics_settings[api_version]" value="<?php echo esc_attr($settings['api_version'] ?? ''); ?>" pattern="\d{4}-\d{2}-\d{2}" required></td></tr>
+        <tr><th><label for="htgp_basics_user_agent"><?php esc_html_e('Identificação HTTP', 'repository-catalog'); ?></label></th><td><input class="regular-text" id="htgp_basics_user_agent" name="htgp_basics_settings[user_agent]" value="<?php echo esc_attr($settings['user_agent'] ?? ''); ?>" required></td></tr>
+        <tr><th><label for="htgp_basics_timeout_seconds"><?php esc_html_e('Timeout em segundos', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_timeout_seconds" name="htgp_basics_settings[timeout_seconds]" value="<?php echo esc_attr($settings['timeout_seconds'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_response_size"><?php esc_html_e('Limite da resposta em bytes', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_response_size" name="htgp_basics_settings[response_size]" value="<?php echo esc_attr($settings['response_size'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_cache_ttl_seconds"><?php esc_html_e('Cache em segundos', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_cache_ttl_seconds" name="htgp_basics_settings[cache_ttl_seconds]" value="<?php echo esc_attr($settings['cache_ttl_seconds'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_api_page_size"><?php esc_html_e('Máximo de projetos por consulta', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_api_page_size" name="htgp_basics_settings[api_page_size]" value="<?php echo esc_attr($settings['api_page_size'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_max_owner_length"><?php esc_html_e('Limite do identificador da conta', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_max_owner_length" name="htgp_basics_settings[max_owner_length]" value="<?php echo esc_attr($settings['max_owner_length'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_max_include_length"><?php esc_html_e('Limite do filtro de inclusão', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_max_include_length" name="htgp_basics_settings[max_include_length]" value="<?php echo esc_attr($settings['max_include_length'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_max_repo_length"><?php esc_html_e('Limite do nome de repositório', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_max_repo_length" name="htgp_basics_settings[max_repo_length]" value="<?php echo esc_attr($settings['max_repo_length'] ?? ''); ?>" min="1" required></td></tr>
+        <tr><th><label for="htgp_basics_profile_url"><?php esc_html_e('URL do perfil no GitHub', 'repository-catalog'); ?></label></th><td><input type="url" class="regular-text" id="htgp_basics_profile_url" name="htgp_basics_settings[profile_url]" value="<?php echo esc_attr($settings['profile_url'] ?? ''); ?>" aria-describedby="htgp_basics_profile_url_description" required><p class="description" id="htgp_basics_profile_url_description"><?php esc_html_e('Informe a URL do perfil em uma origem aprovada pelo ambiente.', 'repository-catalog'); ?></p></td></tr>
+        <tr><th><label for="htgp_basics_limit"><?php esc_html_e('Quantidade', 'repository-catalog'); ?></label></th><td><input type="number" id="htgp_basics_limit" name="htgp_basics_settings[limit]" value="<?php echo esc_attr($settings['limit'] ?? ''); ?>" min="1" max="<?php echo esc_attr($this->configuration->get('api_page_size')); ?>" required></td></tr>
+        <tr><th><label for="htgp_basics_sort"><?php esc_html_e('Ordenação', 'repository-catalog'); ?></label></th><td><select id="htgp_basics_sort" name="htgp_basics_settings[sort]" required><option value=""></option><?php foreach (array('created','updated','pushed','full_name') as $value) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($settings['sort'] ?? '', $value); ?>><?php echo esc_html($value); ?></option><?php endforeach; ?></select></td></tr>
+        <tr><th><label for="htgp_basics_direction"><?php esc_html_e('Direção', 'repository-catalog'); ?></label></th><td><select id="htgp_basics_direction" name="htgp_basics_settings[direction]" required><option value=""></option><?php foreach (array('asc','desc') as $value) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($settings['direction'] ?? '', $value); ?>><?php echo esc_html($value); ?></option><?php endforeach; ?></select></td></tr>
+        <tr><th><label for="htgp_basics_type"><?php esc_html_e('Vínculo', 'repository-catalog'); ?></label></th><td><select id="htgp_basics_type" name="htgp_basics_settings[type]" required><option value=""></option><?php foreach (array('all','owner','member') as $value) : ?><option value="<?php echo esc_attr($value); ?>" <?php selected($settings['type'] ?? '', $value); ?>><?php echo esc_html($value); ?></option><?php endforeach; ?></select></td></tr>
+        <tr><th><?php esc_html_e('Inclusões', 'repository-catalog'); ?></th><td><label><input type="checkbox" name="htgp_basics_settings[include_forks]" value="1" <?php checked(!empty($settings['include_forks'])); ?>> <?php esc_html_e('Forks', 'repository-catalog'); ?></label><br><label><input type="checkbox" name="htgp_basics_settings[include_archived]" value="1" <?php checked(!empty($settings['include_archived'])); ?>> <?php esc_html_e('Arquivados', 'repository-catalog'); ?></label></td></tr>
         </table><?php submit_button(); ?></form></div>
         <?php
     }
@@ -246,7 +246,7 @@ final class HTGP_Basics_Plugin {
         $required = array('profile_url', 'limit', 'sort', 'direction', 'type');
         foreach ($required as $key) {
             if (!isset($settings[$key]) || $settings[$key] === '') {
-                return new WP_Error('htgp_basics_settings', __('Integração não configurada.', 'htgithubforwp-basics'));
+                return new WP_Error('htgp_basics_settings', __('Integração não configurada.', 'repository-catalog'));
             }
         }
         return $settings;
@@ -255,23 +255,23 @@ final class HTGP_Basics_Plugin {
     private function owner_from_profile_url($url, $maximum_length = null) {
         $parts = wp_parse_url(is_string($url) ? trim($url) : '');
         if (!is_array($parts)) {
-            return new WP_Error('htgp_basics_profile_url', __('URL de perfil inválida.', 'htgithubforwp-basics'));
+            return new WP_Error('htgp_basics_profile_url', __('URL de perfil inválida.', 'repository-catalog'));
         }
         if (($parts['scheme'] ?? '') !== 'https' || !$this->configuration->allowed_url($url, 'profile_origins') || isset($parts['user']) || isset($parts['pass']) || isset($parts['query']) || isset($parts['fragment'])) {
-            return new WP_Error('htgp_basics_profile_url', __('URL de perfil inválida.', 'htgithubforwp-basics'));
+            return new WP_Error('htgp_basics_profile_url', __('URL de perfil inválida.', 'repository-catalog'));
         }
         $segments = array_values(array_filter(explode('/', trim($parts['path'] ?? '', '/')), 'strlen'));
         $owner = count($segments) === 1 ? rawurldecode($segments[0]) : '';
         $limit = $maximum_length === null ? $this->configuration->get('max_owner_length') : (int) $maximum_length;
         if ($owner === '' || $limit < 1 || strlen($owner) > $limit || !preg_match('/^[A-Za-z0-9](?:[A-Za-z0-9-]*[A-Za-z0-9])?$/', $owner)) {
-            return new WP_Error('htgp_basics_profile_url', __('A URL deve apontar diretamente para um perfil.', 'htgithubforwp-basics'));
+            return new WP_Error('htgp_basics_profile_url', __('A URL deve apontar diretamente para um perfil.', 'repository-catalog'));
         }
         return $owner;
     }
 
     private function validate_repository_list($value) {
         if (!is_string($value) || strlen($value) > $this->configuration->get('max_include_length')) {
-            return new WP_Error('htgp_basics_include', __('Filtro inválido.', 'htgithubforwp-basics'));
+            return new WP_Error('htgp_basics_include', __('Filtro inválido.', 'repository-catalog'));
         }
         if ($value === '') {
             return array();
@@ -279,14 +279,14 @@ final class HTGP_Basics_Plugin {
         $items = array_filter(array_map('trim', explode(',', $value)));
         foreach ($items as $item) {
             if (strlen($item) > $this->configuration->get('max_repo_length') || !preg_match('/^[A-Za-z0-9._-]+$/', $item)) {
-                return new WP_Error('htgp_basics_include', __('Filtro inválido.', 'htgithubforwp-basics'));
+                return new WP_Error('htgp_basics_include', __('Filtro inválido.', 'repository-catalog'));
             }
         }
         return array_values(array_unique($items));
     }
 
     private function notice(WP_Error $error) {
-        $message = current_user_can('manage_options') ? $error->get_error_message() : __('Conteúdo indisponível.', 'htgithubforwp-basics');
+        $message = current_user_can('manage_options') ? $error->get_error_message() : __('Conteúdo indisponível.', 'repository-catalog');
         return '<p class="htgp-basics-notice" role="status">' . esc_html($message) . '</p>';
     }
 }
