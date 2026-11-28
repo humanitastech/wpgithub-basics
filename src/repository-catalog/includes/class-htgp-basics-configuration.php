@@ -34,24 +34,24 @@ final class HTGP_Basics_Configuration {
         $this->validate_endpoint();
         foreach (array('timeout_seconds' => 'max_timeout_seconds', 'response_size' => 'max_response_size', 'api_page_size' => 'max_api_page_size', 'failure_ttl_seconds' => 'max_backoff_seconds') as $key => $maximum) {
             if ($this->get($key) > $this->get($maximum)) {
-                $this->errors[] = __('Configuração excede o limite autorizado pelo ambiente.', 'repository-catalog');
+                $this->errors[] = __('The setting exceeds the limit defined in the server configuration.', 'repository-catalog');
             }
         }
         foreach (array('link_origins', 'profile_origins') as $key) {
             $origins = array_map('trim', explode(',', $this->values[$key]));
             foreach ($origins as $origin) {
                 if (!$this->valid_origin($origin)) {
-                    $this->errors[] = __('Lista de origens HTTPS inválida.', 'repository-catalog');
+                    $this->errors[] = __('Invalid list of HTTPS origins.', 'repository-catalog');
                 }
             }
             $this->values[$key] = $origins;
         }
         if ($this->get('github_token') !== '' && (!$this->valid_origin($this->get('token_origin')) || $this->origin($this->get('api_base_url')) !== $this->get('token_origin'))) {
-            $this->errors[] = __('A credencial exige uma origem HTTPS correspondente autorizada pelo ambiente.', 'repository-catalog');
+            $this->errors[] = __('The token requires a matching HTTPS origin approved in the server configuration.', 'repository-catalog');
         }
         foreach (array('github_token', 'api_version', 'user_agent') as $key) {
             if (preg_match('/[\r\n]/', $this->get($key))) {
-                $this->errors[] = __('Cabeçalho HTTP inválido.', 'repository-catalog');
+                $this->errors[] = __('Invalid HTTP header.', 'repository-catalog');
             }
         }
     }
@@ -101,7 +101,7 @@ final class HTGP_Basics_Configuration {
         $value = is_scalar($value) ? trim((string) $value) : '';
         if ($required && $value === '') {
             // translators: %s is the name of the required configuration setting.
-            $this->errors[] = sprintf(__('Configuração obrigatória ausente: %s.', 'repository-catalog'), $name);
+            $this->errors[] = sprintf(__('Missing required setting: %s.', 'repository-catalog'), $name);
         }
         return $value;
     }
@@ -110,7 +110,7 @@ final class HTGP_Basics_Configuration {
         $value = $this->environment($name, true, $option_key);
         if ($value !== '' && (!ctype_digit($value) || (int) $value < 1 || (string) (int) $value !== $value)) {
             // translators: %s is the name of the numeric configuration setting.
-            $this->errors[] = sprintf(__('Configuração numérica inválida: %s.', 'repository-catalog'), $name);
+            $this->errors[] = sprintf(__('Invalid numeric setting: %s.', 'repository-catalog'), $name);
             return null;
         }
         return $value === '' ? null : (int) $value;
@@ -123,7 +123,7 @@ final class HTGP_Basics_Configuration {
         }
         $parts = wp_parse_url($url);
         if (!is_array($parts) || ($parts['scheme'] ?? '') !== 'https' || empty($parts['host']) || isset($parts['user']) || isset($parts['pass']) || isset($parts['query']) || isset($parts['fragment']) || !wp_http_validate_url($url)) {
-            $this->errors[] = __('O endpoint externo deve ser uma URL HTTPS pública, sem credenciais incorporadas.', 'repository-catalog');
+            $this->errors[] = __('The API endpoint must be a public HTTPS URL without embedded credentials.', 'repository-catalog');
         }
     }
 }

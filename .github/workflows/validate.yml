@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - name: Validate PHP syntax
-        run: find codigo tests -name '*.php' -print0 | xargs -0 -n 1 php -l
+        run: find src tests -name '*.php' -print0 | xargs -0 -n 1 php -l
       - name: Run offline security regressions
         run: php tests/security.php
       - name: Build installable basics package

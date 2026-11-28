@@ -1,7 +1,7 @@
 <?php
 // Offline regression tests; no WordPress database, real credentials or network.
 define('ABSPATH', __DIR__);
-$bootstrap = file_get_contents(__DIR__ . '/../codigo/repository-catalog/repository-catalog.php');
+$bootstrap = file_get_contents(__DIR__ . '/../src/repository-catalog/repository-catalog.php');
 preg_match('/Version:\s*([0-9.]+)/', $bootstrap, $candidate_version);
 define('HTGP_BASICS_VERSION', $candidate_version[1]);
 class WP_Error { public $code; public function __construct($code, $message) { $this->code = $code; } }
@@ -45,9 +45,9 @@ function wp_remote_retrieve_header($r, $key) { return $r['retry']; }
 function do_action(...$args) { $GLOBALS['events'][] = $args; }
 function sanitize_text_field($v) { return strip_tags($v); }
 function esc_url_raw($v) { return $v; }
-require __DIR__ . '/../codigo/repository-catalog/includes/class-htgp-basics-configuration.php';
-require __DIR__ . '/../codigo/repository-catalog/includes/class-htgp-basics-article-metadata.php';
-require __DIR__ . '/../codigo/repository-catalog/includes/class-htgp-basics-github-client.php';
+require __DIR__ . '/../src/repository-catalog/includes/class-htgp-basics-configuration.php';
+require __DIR__ . '/../src/repository-catalog/includes/class-htgp-basics-article-metadata.php';
+require __DIR__ . '/../src/repository-catalog/includes/class-htgp-basics-github-client.php';
 $settings = array('api_base_url' => 'https://api.example', 'api_version' => '2022-11-28', 'user_agent' => 'synthetic-audit', 'timeout_seconds' => 5, 'response_size' => 100000, 'cache_ttl_seconds' => 300, 'api_page_size' => 100, 'max_owner_length' => 39, 'max_include_length' => 1000, 'max_repo_length' => 100);
 $policy = array('HTGP_BASICS_PUBLIC_LINK_ORIGINS' => 'https://public.example', 'HTGP_BASICS_PROFILE_ORIGINS' => 'https://public.example', 'HTGP_BASICS_FAILURE_TTL_SECONDS' => '10', 'HTGP_BASICS_MAX_BACKOFF_SECONDS' => '60', 'HTGP_BASICS_REQUEST_BUDGET_SECONDS' => '8', 'HTGP_BASICS_MAX_REQUESTS' => '2', 'HTGP_BASICS_MAX_TIMEOUT_SECONDS' => '5', 'HTGP_BASICS_MAX_RESPONSE_SIZE' => '100000', 'HTGP_BASICS_MAX_API_PAGE_SIZE' => '100');
 foreach ($policy as $key => $value) { putenv($key . '=' . $value); }
@@ -123,7 +123,7 @@ function esc_attr_e($v, $domain) { echo esc_attr($v); }
 function wp_date($format, $time) { return gmdate('Y-m-d', $time); }
 function number_format_i18n($v) { return number_format($v); }
 define('HTGP_BASICS_URL', 'https://synthetic.example/plugin/');
-require __DIR__ . '/../codigo/repository-catalog/includes/class-htgp-basics-plugin.php';
+require __DIR__ . '/../src/repository-catalog/includes/class-htgp-basics-plugin.php';
 $settings = array_merge($settings, array('profile_url' => 'https://public.example/demo', 'limit' => 2, 'sort' => 'updated', 'direction' => 'desc', 'type' => 'owner', 'include_forks' => false, 'include_archived' => false));
 $plugin = HTGP_Basics_Plugin::instance();
 $authorized = false; $input = $settings; $input['api_base_url'] = 'https://other.example'; check($plugin->validate_settings($input) === $settings, 'unprivileged configuration denied');
@@ -160,10 +160,10 @@ $html = render_repositories(array($first, $second));
 check(strpos($html, 'htgp-basics-project-groups') === false, 'unrelated topics do not create categories');
 $first['topics'] = array('skill');
 $html = render_repositories(array($first, $second));
-check(strpos($html, '>Skills</h2>') !== false && strpos($html, '>Geral</h2>') !== false && substr_count($html, '<article ') === 2, 'mixed classified and unclassified projects get Geral');
+check(strpos($html, '>Skills</h2>') !== false && strpos($html, '>General</h2>') !== false && substr_count($html, '<article ') === 2, 'mixed classified and unclassified projects get General');
 $second['topics'] = array('plugin');
 $html = render_repositories(array($first, $second));
-check(strpos($html, '>Plugins</h2>') < strpos($html, '>Skills</h2>') && strpos($html, '>Geral</h2>') === false, 'classified projects grouped without empty Geral');
+check(strpos($html, '>Plugins</h2>') < strpos($html, '>Skills</h2>') && strpos($html, '>General</h2>') === false, 'classified projects grouped without empty General');
 $first['topics'] = array('skill', 'plugin');
 $html = render_repositories(array($first, $second));
 check(substr_count($html, '<article ') === 2 && strpos($html, '>Skills</h2>') === false, 'multiple type topics use fixed priority without duplicates');
@@ -173,7 +173,7 @@ check(substr_count($html, '<article ') === 1 && strpos($html, 'htgp-basics-proje
 $first['private'] = false;
 $html = render_repositories(array($first, $second), array('include' => 'second'));
 check(strpos($html, 'htgp-basics-project-groups') === false, 'grouping happens after inclusion filter');
-foreach (array('theme' => 'Temas', 'app' => 'Aplicações', 'library' => 'Bibliotecas', 'docs' => 'Documentação') as $topic => $label) {
+foreach (array('theme' => 'Themes', 'app' => 'Applications', 'library' => 'Libraries', 'docs' => 'Documentation') as $topic => $label) {
     $first['topics'] = array($topic);
     $html = render_repositories(array($first));
     check(strpos($html, '>' . $label . '</h2>') !== false, 'supported category ' . $topic);

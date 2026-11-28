@@ -1,56 +1,24 @@
 # Repository Catalog
 
-Plugin WordPress para apresentar repositórios públicos do GitHub, agrupados por tópicos.
+Display public GitHub repositories on a WordPress page. Cards show available descriptions, languages, statistics, and release details and link directly to GitHub. The catalog groups repositories by topic and supports sorting, per-page selection, and filters for forks and archived repositories.
 
-O código em desenvolvimento está na branch [dev](https://github.com/humanitastech/wpgithub-basics/tree/dev).
+## Installation
 
-## Funcionalidades
+1. Download `repository-catalog.zip` from [GitHub Releases](https://github.com/humanitastech/wpgithub-basics/releases). The plugin requires WordPress 6.5 and PHP 7.4 or later.
+2. In WordPress, go to **Plugins → Add Plugin → Upload Plugin** and activate the ZIP.
+3. Follow the [configuration guide](docs/secure-configuration.md) to set server limits and configure **Settings → Repository Catalog**.
+4. Add `[ht_github_projects_basics]` to a Shortcode block. To select repositories for a page, use `[ht_github_projects_basics include="repo-one,repo-two"]`.
 
-- Cartões com descrição, linguagem, estatísticas e dados de release disponíveis.
-- Agrupamento pelos tópicos plugin, skill, theme, app, library e docs.
-- Seleção de repositórios, ordenação, forks e arquivados configuráveis.
-- Cache, orçamento de chamadas e recuo diante de erros da API.
-- Links diretos para os repositórios públicos.
+## Display names
 
-## Instalação
+A card can use a quoted `display_name` field in the front matter of `ARTICLE.md` at the latest stable release tag. If the release, file, or field is missing or invalid, the card uses the repository name. The plugin caches only the validated display name from the article. Each repository with a release can require an additional API request within the configured request budget.
 
-Requer WordPress 6.5 ou superior e PHP 7.4 ou superior.
+## Development
 
-Na branch dev, execute o empacotamento na raiz do projeto.
+The plugin source is in `src/repository-catalog`. Configuration uses the `htgp_basics_settings` option and `HTGP_BASICS_*` environment variables. Changes are developed on `dev` and promoted to `main` for release.
 
-~~~powershell
-./build-package.ps1
-~~~
+Run `php tests/security.php` for offline checks. Run `./build-package.ps1` with PowerShell to generate `dist/repository-catalog.zip` and its SHA-256 checksum. See the [integration test setup](docs/validation-1.0.0.md) for testing an installed package.
 
-O resultado é dist/repository-catalog.zip. Instale-o em Plugins → Adicionar plugin → Enviar plugin e configure Integração GitHub basics.
+## License
 
-Consulte documentacao/CONFIGURACAO_SEGURA.md para definir a política de consultas, origens HTTPS e credencial opcional do ambiente.
-
-Adicione o shortcode a uma página.
-
-~~~text
-[ht_github_projects_basics]
-[ht_github_projects_basics include="repositorio-a,repositorio-b"]
-~~~
-
-## Desenvolvimento
-
-~~~powershell
-php tests/security.php
-~~~
-
-O diretório do plugin é codigo/repository-catalog. A configuração usa a opção htgp_basics_settings e as variáveis HTGP_BASICS_*.
-
-A branch main recebe as versões promovidas. O desenvolvimento acontece em dev.
-
-## Licença
-
-GPL-2.0-or-later. Copyright HumanitasTech e contribuidores.
-
-## Nomes de apresentação — candidata 1.1.0
-
-O cartão pode usar display_name de ARTICLE.md da tag da release estável mais recente. O campo deve ser uma string entre aspas no front matter, como `display_name: "Web Security Audit Skill"`. Ele não renomeia repositórios nem cria Posts. Sem release, arquivo ou metadado válido, permanece o nome técnico. O link segue direto para o GitHub.
-
-O parser é restrito e compartilhado por equivalência com a edição completa, com prefixo próprio. Não executa YAML, PHP ou shortcodes, não renderiza o corpo do artigo e armazena em cache somente o nome sanitizado. A consulta pública não envia a credencial de listagem e usa ref explícita refs/tags/<tag>. Há até uma consulta adicional por repositório com release; dimensione a política de chamadas existente sem presumir aumento de limites.
-
-Candidata em dev; publicação de release da basics não incluída nesta entrega. Veja documentacao/VALIDACAO_1.1.0.md.
+GPL-2.0-or-later. Copyright HumanitasTech and contributors.

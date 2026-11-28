@@ -5,17 +5,17 @@ param(
 $ErrorActionPreference = 'Stop'
 
 $pluginSlug = 'repository-catalog'
-$sourceDirectory = Join-Path $ProjectRoot "codigo\$pluginSlug"
+$sourceDirectory = Join-Path $ProjectRoot "src\$pluginSlug"
 $mainFile = Join-Path $sourceDirectory "$pluginSlug.php"
 $distributionDirectory = Join-Path $ProjectRoot 'dist'
 $packagePath = Join-Path $distributionDirectory "$pluginSlug.zip"
 
 if (-not (Test-Path -LiteralPath $sourceDirectory -PathType Container)) {
-    throw "Diretório-fonte obrigatório não encontrado: $sourceDirectory"
+    throw "Required source directory not found: $sourceDirectory"
 }
 
 if (-not (Test-Path -LiteralPath $mainFile -PathType Leaf)) {
-    throw "Arquivo principal obrigatório não encontrado: $mainFile"
+    throw "Required main plugin file not found: $mainFile"
 }
 
 New-Item -ItemType Directory -Path $distributionDirectory -Force | Out-Null
@@ -32,10 +32,10 @@ try {
         $archive.Dispose()
     }
     if ($entries -notcontains "$pluginSlug/$pluginSlug.php") {
-        throw "O ZIP não contém $pluginSlug/$pluginSlug.php."
+        throw "The ZIP does not contain $pluginSlug/$pluginSlug.php."
     }
     if ($entries | Where-Object { $_ -match '^(?:repository-catalog[-_.]?\d|htgithubforwp-basics|humanitastech-github)' }) {
-        throw 'O ZIP contém diretório versionado ou slug legado.'
+        throw 'The ZIP contains a versioned directory or a legacy slug.'
     }
 
     Move-Item -LiteralPath $temporaryPackage -Destination $packagePath -Force

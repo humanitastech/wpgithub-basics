@@ -2,8 +2,8 @@
 /**
  * Plugin Name: Repository Catalog
  * Plugin URI:  https://github.com/humanitastech/wpgithub-basics
- * Description: Exibe repositórios públicos do GitHub em uma grade curável, responsiva e armazenada em cache.
- * Version:     1.1.0
+ * Description: Display public GitHub repositories in a configurable, responsive grid with caching.
+ * Version:     1.1.1
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author:      HumanitasTech
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('HTGP_BASICS_VERSION')) {
-    define('HTGP_BASICS_VERSION', '1.1.0');
+    define('HTGP_BASICS_VERSION', '1.1.1');
 }
 if (!defined('HTGP_BASICS_FILE')) {
     define('HTGP_BASICS_FILE', __FILE__);
