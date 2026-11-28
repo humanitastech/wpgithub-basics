@@ -20,13 +20,13 @@ define('HTGP_BASICS_MAX_RESPONSE_SIZE', 524288);
 define('HTGP_BASICS_MAX_API_PAGE_SIZE', 5);
 ~~~
 
-With the plugin active, open **Settings → Repository Catalog** and enter the example values.
+With the plugin active, open **Settings → HT Repository Catalog** and enter the example values.
 
 | Field | Example value |
 |---|---|
 | HTTPS API endpoint | `https://api.github.com` |
 | API version | `2022-11-28` |
-| HTTP user agent | `repository-catalog-review` |
+| HTTP user agent | `ht-repository-catalog-review` |
 | Timeout in seconds | 3 |
 | Response size limit in bytes | 524288 |
 | Cache duration in seconds | 600 |

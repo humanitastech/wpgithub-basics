@@ -1,10 +1,10 @@
 ---
-display_name: "Repository Catalog"
+display_name: "HT Repository Catalog"
 ---
 
-# Repository Catalog
+# HT Repository Catalog
 
-Repository Catalog helps WordPress site owners present public GitHub repositories in a catalogue. Its cards show available descriptions, languages, statistics and release information, then take visitors directly to GitHub.
+HT Repository Catalog helps WordPress site owners present public GitHub repositories in a catalogue. Its cards show available descriptions, languages, statistics and release information, then take visitors directly to GitHub.
 
 Configure the GitHub profile and add `[ht_github_projects_basics]` to a page. Repositories can be selected, sorted and grouped by supported topics, including `plugin`, `skill`, `theme`, `app`, `library` and `docs`.
 
@@ -23,10 +23,10 @@ The plugin interface and documentation now use English throughout.
 
 ## Requirements and configuration
 
-The plugin declares WordPress 6.5 or newer and PHP 7.4 or newer. The host needs outbound HTTPS and the deployment settings described in the [configuration guide](https://github.com/humanitastech/wpgithub-basics/blob/v1.1.1/docs/secure-configuration.md). Configure the profile and selection rules in **Repository Catalog**, then insert the shortcode in a page.
+The plugin declares WordPress 6.5 or newer and PHP 7.4 or newer. The host needs outbound HTTPS and the deployment settings described in the [configuration guide](https://github.com/humanitastech/ht-wpgithub-basics/blob/v1.1.2/docs/secure-configuration.md). Configure the profile and selection rules in **HT Repository Catalog**, then insert the shortcode in a page.
 
 The basics edition reads public repositories. It retains direct repository links and does not include private repository access or article import into WordPress Posts.
 
 ## Availability
 
-HumanitasTech maintains the public project under GPL-2.0-or-later. Get the installable package from [GitHub Releases](https://github.com/humanitastech/wpgithub-basics/releases).
+HumanitasTech maintains the public project under GPL-2.0-or-later. Get the installable package from [GitHub Releases](https://github.com/humanitastech/ht-wpgithub-basics/releases).

@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name: Repository Catalog
- * Plugin URI:  https://github.com/humanitastech/wpgithub-basics
+ * Plugin Name: HT Repository Catalog
+ * Plugin URI:  https://github.com/humanitastech/ht-wpgithub-basics
  * Description: Display public GitHub repositories in a configurable, responsive grid with caching.
- * Version:     1.1.1
+ * Version:     1.1.2
  * Requires at least: 6.5
  * Requires PHP: 7.4
  * Author:      HumanitasTech
  * License:     GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: repository-catalog
+ * Text Domain: ht-repository-catalog
  */
 
 if (!defined('ABSPATH')) {
@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
 }
 
 if (!defined('HTGP_BASICS_VERSION')) {
-    define('HTGP_BASICS_VERSION', '1.1.1');
+    define('HTGP_BASICS_VERSION', '1.1.2');
 }
 if (!defined('HTGP_BASICS_FILE')) {
     define('HTGP_BASICS_FILE', __FILE__);

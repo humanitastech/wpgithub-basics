@@ -167,5 +167,5 @@ final class HTGP_Basics_GitHub_Client {
     private function valid_repository($name) {
         return is_string($name) && $name !== '' && strlen($name) <= $this->configuration->get('max_repo_length') && $name !== '.' && $name !== '..' && preg_match('/^[A-Za-z0-9._-]+$/', $name);
     }
-    private function error($code) { return new WP_Error($code, __('Content unavailable.', 'repository-catalog')); }
+    private function error($code) { return new WP_Error($code, __('Content unavailable.', 'ht-repository-catalog')); }
 }

@@ -29,25 +29,28 @@ function verify($condition, $label) {
     if (!$condition) { throw new RuntimeException($label); }
     echo 'PASS: ' . $label . PHP_EOL;
 }
-$plugin_file = 'repository-catalog/repository-catalog.php';
+$baseline_plugin_file = 'repository-catalog/repository-catalog.php';
+$plugin_file = 'ht-repository-catalog/ht-repository-catalog.php';
 if ($phase === 'install') {
     wp_install('Basics isolated', 'basics_test_admin', 'admin@example.test', false, '', wp_generate_password());
     update_option('htgp_basics_settings', $settings);
     $upgrader = new Plugin_Upgrader(new Automatic_Upgrader_Skin());
     ob_start(); $result = $upgrader->install(getenv('HTGP_BASELINE_ZIP')); ob_end_clean();
     verify($result === true, 'baseline ZIP installed through WordPress');
-    verify(activate_plugin($plugin_file) === null, 'baseline activates');
+    verify(activate_plugin($baseline_plugin_file) === null, 'baseline activates');
     exit;
 }
 if ($phase === 'upgrade') {
-    verify(HTGP_BASICS_VERSION === '1.1.0', 'baseline version loads before update');
+    verify(HTGP_BASICS_VERSION === '1.1.1', 'baseline version loads before update');
     $upgrader = new Plugin_Upgrader(new Automatic_Upgrader_Skin());
     ob_start(); $result = $upgrader->install(getenv('HTGP_CANDIDATE_ZIP'), array('overwrite_package' => true)); ob_end_clean();
-    verify($result === true, '1.1.1 ZIP upgrades the baseline');
+    verify($result === true, '1.1.2 ZIP installs under the new slug');
+    deactivate_plugins($baseline_plugin_file);
+    verify(activate_plugin($plugin_file) === null, 'new slug activates');
     exit;
 }
 if ($phase !== 'verify') { exit(2); }
-verify(HTGP_BASICS_VERSION === '1.1.1', 'candidate version loads from the installed ZIP');
+verify(HTGP_BASICS_VERSION === '1.1.2', 'candidate version loads from the installed ZIP');
 verify(get_option('htgp_basics_settings') === $settings, 'upgrade preserves basics settings');
 $payload = '"Web Security Audit Skill"'; $release_available = true; $calls = array();
 add_filter('pre_http_request', function ($result, $args, $url) use (&$payload, &$calls, &$release_available) {
