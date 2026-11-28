@@ -17,14 +17,21 @@ Os tópicos plugin, skill, theme, app, library e docs organizam o catálogo. Out
 
 == Installation ==
 
-1. Gere htgithubforwp-basics.zip com build-package.ps1.
-2. Instale o ZIP em Plugins → Adicionar plugin → Enviar plugin.
-3. Siga documentacao/CONFIGURACAO_SEGURA.md para os parâmetros de ambiente.
-4. Configure Integração GitHub basics e adicione o shortcode a uma página.
+1. Instale e ative o plugin no painel do WordPress. Se recebeu um ZIP, use Plugins → Adicionar plugin → Enviar plugin.
+2. Configure no servidor as origens HTTPS e os limites de consulta obrigatórios. O [guia de configuração com exemplo sem token](https://github.com/humanitastech/wpgithub-basics/blob/dev/documentacao/CONFIGURACAO_SEGURA.md#primeira-configuração-sem-token) mostra quais constantes adicionar ao wp-config.php e quais valores preencher no painel. Você precisa ter acesso à configuração do servidor e a hospedagem precisa permitir consultas HTTPS à API.
+3. Em Configurações → Integração GitHub basics, preencha os dados da API e a URL do perfil público, escolha a quantidade e a ordenação dos repositórios e salve.
+4. Insira [ht_github_projects_basics] em um bloco Shortcode e visualize a página para conferir os cartões.
 
 == External services ==
 
-O plugin consulta a API GitHub na origem HTTPS aprovada pelo ambiente. A organização que o instala deve informar o serviço e os termos aplicáveis aos seus usuários.
+O plugin usa a [API REST do GitHub](https://docs.github.com/en/rest) para montar o catálogo de repositórios públicos. Depois que o administrador configura a integração e adiciona o shortcode, o servidor WordPress consulta o endpoint HTTPS configurado quando a página é renderizada e o cache precisa ser preenchido ou renovado.
+
+O servidor envia o identificador do perfil, os parâmetros de paginação, vínculo e ordenação, a versão da API e a identificação HTTP configurada. Quando consulta a última release estável e o nome de apresentação em ARTICLE.md, também envia os identificadores do proprietário e do repositório e, para o arquivo, a referência da tag. Se houver um token opcional, ele é enviado no cabeçalho de autorização somente na listagem de repositórios e somente à origem autorizada pelo administrador. As consultas de release e de ARTICLE.md são anônimas.
+
+O WordPress guarda temporariamente os metadados públicos necessários aos cartões, como nomes, descrições, linguagens, estatísticas, tópicos, links e dados da release. De ARTICLE.md, o cache guarda apenas o nome de apresentação validado.
+
+* [Termos de uso do GitHub](https://docs.github.com/en/site-policy/github-terms/github-terms-of-service)
+* [Política de privacidade do GitHub](https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement)
 
 == Changelog ==
 

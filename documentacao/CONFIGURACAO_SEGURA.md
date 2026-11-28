@@ -2,6 +2,46 @@
 
 Nenhum endpoint, origem, token ou limite operacional é presumido pelo runtime. A implantação escolhe os valores em ambiente ou constantes do wp-config.php, fora do Git e do ZIP. Sem política válida, a integração falha de forma fechada. Não copiar credenciais para testes, mensagens ou opções do WordPress.
 
+## Primeira configuração sem token
+
+O exemplo abaixo usa o GitHub público e valores para avaliar o catálogo em um site de teste. Revise os limites conforme a hospedagem e o volume de tráfego antes de usar em produção.
+
+Adicione ao arquivo wp-config.php, antes de ele carregar wp-settings.php, ou defina os mesmos valores em variáveis de ambiente. As variáveis de ambiente têm precedência sobre as constantes.
+
+~~~php
+define('HTGP_BASICS_PUBLIC_LINK_ORIGINS', 'https://github.com');
+define('HTGP_BASICS_PROFILE_ORIGINS', 'https://github.com');
+define('HTGP_BASICS_FAILURE_TTL_SECONDS', 60);
+define('HTGP_BASICS_MAX_BACKOFF_SECONDS', 300);
+define('HTGP_BASICS_REQUEST_BUDGET_SECONDS', 10);
+define('HTGP_BASICS_MAX_REQUESTS', 11);
+define('HTGP_BASICS_MAX_TIMEOUT_SECONDS', 3);
+define('HTGP_BASICS_MAX_RESPONSE_SIZE', 524288);
+define('HTGP_BASICS_MAX_API_PAGE_SIZE', 5);
+~~~
+
+Com o plugin ativo, abra **Configurações → Integração GitHub basics** e preencha os campos.
+
+| Campo | Valor de exemplo |
+|---|---|
+| Endpoint HTTPS da API | `https://api.github.com` |
+| Versão da API | `2022-11-28` |
+| Identificação HTTP | `htgithubforwp-basics-review` |
+| Timeout em segundos | 3 |
+| Limite da resposta em bytes | 524288 |
+| Cache em segundos | 600 |
+| Máximo de projetos por consulta | 5 |
+| Limite do identificador da conta | 39 |
+| Limite do filtro de inclusão | 512 |
+| Limite do nome de repositório | 100 |
+| URL do perfil no GitHub | `https://github.com/humanitastech` |
+| Quantidade | 5 |
+| Ordenação | `full_name` |
+| Direção | `asc` |
+| Vínculo | `owner` |
+
+Salve as opções e abra uma página com um bloco Shortcode contendo `[ht_github_projects_basics]`. A página deve mostrar os repositórios públicos do perfil, com links para o GitHub. Os cartões mostram dados da última release estável quando disponíveis.
+
 ## Parâmetros de conexão e consulta
 | Ambiente/constante | Opção administrativa de fallback |
 |---|---|
