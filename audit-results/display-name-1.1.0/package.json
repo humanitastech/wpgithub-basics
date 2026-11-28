@@ -1,0 +1,14 @@
+{
+  "version": "1.1.0",
+  "sha256": "fa3ac696cc591accfb6b7d7cdd5627288387e07807bc8b70959c2692ad905194",
+  "entries": {
+    "htgithubforwp-basics/htgithubforwp-basics.php": "830158dfae9d945d5e4c67b12760de2aa595347f26796780f62d3bcdb315b769",
+    "htgithubforwp-basics/LICENSE": "498d32907f132c2cd7d3ae269f304aed87156293f63e724b83d9f62ed787d55a",
+    "htgithubforwp-basics/readme.txt": "f29b07ebe5b2f4890bbe0c0154a8a58a65e164b7d91eb4bf537071f8bd7451c8",
+    "htgithubforwp-basics/includes/class-htgp-basics-article-metadata.php": "678e514308475a92ee07f93a1dfb721a14cc85c559a2f48f01c79d333955cd16",
+    "htgithubforwp-basics/includes/class-htgp-basics-configuration.php": "df7757e3d1168c21a5c3a8ebeb4930965f9e09d4b0b49981a968dc4edbea7a73",
+    "htgithubforwp-basics/includes/class-htgp-basics-github-client.php": "86c515f01d98af06d9b9b7a4c712ab72130c851b09f49b98e720318aaee2b623",
+    "htgithubforwp-basics/includes/class-htgp-basics-plugin.php": "f12f8b8fcb87f8de64fc91c23c47104986917758b6e681481d2f52ff7a6350d0",
+    "htgithubforwp-basics/assets/css/project-cards.css": "854523ceb0b786ab7640d25ffaa4496ca94ed0f54932a371c5165bdbe4b36a73"
+  }
+}
